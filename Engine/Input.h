@@ -1,0 +1,22 @@
+#pragma once
+#include <dInput.h>
+#include <DirectXMath.h>
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "dInput8.lib")
+
+#define SAFE_RELEASE(p) if(p != nullptr){ p->Release(); p = nullptr;}
+
+using namespace DirectX;
+
+namespace Input
+{
+	void Initialize(HWND hWnd);
+	void Update();
+	bool IsKey(int keyCode); //‰Ÿ‚³‚ê‚Ä‚¢‚é
+	bool IsKeyDown(int keyCode); //‰Ÿ‚³‚ê‚½uŠÔ
+	bool IsKeyUp(int keyCode); //—£‚µ‚½uŠÔ
+	XMVECTOR GetMousePosition();
+	void SetMousePosition(int x, int y);
+	void Release();
+};
+
