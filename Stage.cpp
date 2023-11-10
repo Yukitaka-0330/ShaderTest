@@ -15,7 +15,8 @@ Stage::~Stage()
 void Stage::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("Assets/BoxDefault.fbx");
+   // hModel_ = Model::Load("Assets/BoxDefault.fbx");
+    hModel_ = Model::Load("Assets/ShaderSample.png");
     assert(hModel_ >= 0);
 }
 
