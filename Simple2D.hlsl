@@ -45,5 +45,23 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD)
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
+	/*
+	// テクスチャサンプリング
+	float4 color = g_texture.Sample(g_sampler, inData.uv);
+
+	// 正確なグレースケール変換式
+	float grayscale = 0.298912 * color.x + 0.586611 * color.y + 0.114478 * color.z;
+
+	// グレースケールにするための近似値を求める式
+	grayscale = (2 * color.x + 4 * color.y + color.z) / 7;
+
+	return grayscale;
+	*/
+
+	//値は階調数
+	/*float4 color = floor(g_texture.Sample(g_sampler, inData.uv) * 5.0) / 5;
+	return color;*/
+
 	return g_texture.Sample(g_sampler, inData.uv);
+	
 }

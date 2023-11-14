@@ -140,7 +140,9 @@ HRESULT Sprite::CreateConstantBuffer()
 HRESULT Sprite::LoadTexture()
 {
 	pTexture_ = new Texture;
-	pTexture_->Load("Assets\\dice.png");
+	//pTexture_->Load("Assets\\ShaderSample.png");
+	//pTexture_->Load("Assets\\ShaderTextureSample.png");
+	pTexture_->Load("Assets\\CarSample.jpg");
 	return S_OK;
 }
 
