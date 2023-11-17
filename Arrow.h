@@ -1,17 +1,16 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-
 //◆◆◆を管理するクラス
-class Stage : public GameObject
+class Arrow : public GameObject
 {
 public:
     int hModel_;
     //コンストラクタ
-    Stage(GameObject* parent);
+    Arrow(GameObject* parent);
 
     //デストラクタ
-    ~Stage();
+    ~Arrow();
 
     //初期化
     void Initialize() override;

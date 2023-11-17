@@ -7,6 +7,9 @@
 #include "Engine/RootJob.h"
 #include "Engine/Model.h"
 
+#include "ColorBall.h"
+#include "Arrow.h"
+
 #pragma comment(lib, "winmm.lib")
 
 
@@ -82,6 +85,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	pRootJob = new RootJob(nullptr);
 	pRootJob->Initialize();
 
+	ColorBall* pColorBall;
+	pColorBall = new ColorBall(nullptr);
+	pColorBall->Initialize();
+
+	Arrow* pArrow;
+	pArrow = new Arrow(nullptr);
+	pArrow->Initialize();
+
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -135,11 +146,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			Input::Update();
 			pRootJob->UpdateSub();
 
+			pColorBall->Update();
+			pArrow->Update();
+
 			//▼描画
 			Direct3D::BeginDraw();
 
 			//ルートジョブから、すべてのオブジェクトのドローを呼ぶ
 			pRootJob->DrawSub();
+
+
+			pColorBall->Draw();
+			pArrow->Draw();
+
 			Direct3D::EndDraw();
 		}
 	}
@@ -148,6 +167,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	pRootJob->ReleaseSub();
 	Input::Release();
 	Direct3D::Release();
+
+	pColorBall->Release();
+	pArrow->Release();
 
 	return 0;
 }
