@@ -22,8 +22,10 @@ void Arrow::Initialize()
 //çXêV
 void Arrow::Update()
 {
-    transform_.rotate_.y = -90;
-    transform_.position_.x = -3;
+    transform_.rotate_.y = 90;
+    transform_.scale_.x = 1;
+    transform_.scale_.y = 1;
+    transform_.position_.z = -3;
 }
 
 //ï`âÊ
