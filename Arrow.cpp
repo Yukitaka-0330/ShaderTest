@@ -26,6 +26,8 @@ void Arrow::Update()
     transform_.scale_.x = 1;
     transform_.scale_.y = 1;
     transform_.position_.z = -3;
+
+    //transform_.position_.y = 2;
 }
 
 //•`‰æ

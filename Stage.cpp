@@ -17,15 +17,18 @@ void Stage::Initialize()
 {
     hModel_ = Model::Load("Assets/Ground.fbx");
     assert(hModel_ >= 0);
+
+    transform_.position_.y = -1;
+    transform_.scale_.x = 10;
+    transform_.scale_.y = 10;
+    transform_.scale_.z = 10;
+
 }
 
 //çXêV
 void Stage::Update()
 {
-    transform_.position_.y = -1;
-    transform_.scale_.x = 10;
-    transform_.scale_.y = 10;
-    transform_.scale_.z = 10;
+    
 
 }
 

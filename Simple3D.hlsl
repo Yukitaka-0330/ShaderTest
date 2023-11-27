@@ -41,7 +41,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 
 	normal = mul(normal, matW);
 
-	float4 light = float4(-1, 0, 0, 0);
+	float4 light = float4(-1, 1, 0, 0);
 	light = normalize(light);
 	outData.color = clamp(dot(normal, light), 0, 1);
 
@@ -54,12 +54,12 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 //„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
 float4 PS(VS_OUT inData) : SV_Target
 {
-	float4 lightSource = float4(1.5, 1.5, 1.5, 1.0);
-	float4 ambentSource = float4(0.2, 0.2, 0.2, 1.0);
+	float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);
+	float4 ambentSource = float4(0.5, 0.5, 0.5, 1.0); //•¨‘Ì‚ª‚Ç‚ê‚¾‚¯ŠÂ‹«Œõ‚ğ”½Ë‚Ü‚½‚Í•úË‚·‚é‚©‚ğ§Œä‚·‚é
 	float4 diffuse;
 	float4 ambient;
 
-	if (!isTexture)
+	if (isTexture == 0)
 	{
 		diffuse = lightSource * diffuseColor * inData.color;
 		ambient = lightSource * diffuseColor * ambentSource;
