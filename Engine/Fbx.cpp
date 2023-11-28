@@ -196,7 +196,6 @@ void Fbx::PassDataToCB(Transform transform)//ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚ÉŠeíî•ñ‚ğ“n‚
 		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 		cb.lightDirection = LIGHTVEC;
-		cb.diffuseColor = { 0.5f,0.5f, 0.5f, 1.0f };
 		XMStoreFloat4(&cb.eyepos, Camera::GetEyePosition());
 
 
