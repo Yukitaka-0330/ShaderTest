@@ -193,6 +193,7 @@ void Fbx::PassDataToCB(Transform transform)//ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚ÉŠeíî•ñ‚ğ“n‚
 		CONSTANT_BUFFER cb;
 		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
+		cb.isTexture = pMaterialList_[i].pTexture != nullptr;
 
 		if (i == 1) {
 			cb.diffuseColor = XMFLOAT4(1, 1, 1, 1);
