@@ -63,10 +63,15 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 diffuse;
 	float4 ambient;
 
-	if (isTexture == 0)
+	float4 l;
+
+
+	if (isTexture == false)
 	{
 		diffuse = lightSource * diffuseColor * inData.color;
 		ambient = lightSource * diffuseColor * ambentSource;
+
+
 	}
 	else
 	{
