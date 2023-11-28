@@ -20,10 +20,11 @@ class Fbx
 {
 	struct CONSTANT_BUFFER
 	{
+		XMMATRIX	matW;
 		XMMATRIX	matWVP;//wvp
 		XMMATRIX	matNormal;//ワールド変換だけのやつ
 		XMFLOAT4	diffuseColor;//面の色
-		XMFLOAT4	lightDirection;
+		XMFLOAT4	lightDirection;//ライトの方向
 		XMFLOAT4	eyepos;
 		int			isTexture;
 	};

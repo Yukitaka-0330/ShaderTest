@@ -4,6 +4,8 @@
 #include "Camera.h"
 #include "Texture.h"
 
+const XMFLOAT4 LIGHTVEC = { 1,5,0,1 };
+
 //ƒ|ƒCƒ“ƒ^•Ï”‚ÍƒŠƒŠ[ƒX
 //new‚ÍƒfƒŠ[‚Æ
 //ƒ|ƒCƒ“ƒ^‚ğnew‚µ‚½‚â‚Â‚ÍƒŠƒŠ[ƒX‚µ‚Ä‚©‚çƒfƒŠ[‚Æ
@@ -193,7 +195,10 @@ void Fbx::PassDataToCB(Transform transform)//ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚ÉŠeíî•ñ‚ğ“n‚
 		CONSTANT_BUFFER cb;
 		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
-		cb.isTexture = pMaterialList_[i].pTexture != nullptr;
+		cb.lightDirection = LIGHTVEC;
+		cb.diffuseColor = { 0.5f,0.5f, 0.5f, 1.0f };
+		XMStoreFloat4(&cb.eyepos, Camera::GetEyePosition());
+
 
 		if (i == 1) {
 			cb.diffuseColor = XMFLOAT4(1, 1, 1, 1);

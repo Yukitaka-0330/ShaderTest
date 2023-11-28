@@ -23,7 +23,11 @@ namespace Camera
 	void SetTarget(XMVECTOR target);
 	void SetTarget(XMFLOAT3 target);
 
-	//XMVECTOR GetEyePosition();
+	/// <summary>
+	/// カメラの位置情報を取得
+	/// </summary>
+	/// <returns></returns>
+	XMVECTOR GetEyePosition();
 
 	//ビュー行列を取得
 	XMMATRIX GetViewMatrix();
