@@ -15,8 +15,8 @@ Arrow::~Arrow()
 //‰Šú‰»
 void Arrow::Initialize()
 {
-    hModel_ = Model::Load("Assets/Arrow.fbx");
-    assert(hModel_ >= 0);
+   /* hModel_ = Model::Load("Assets/Arrow.fbx");
+    assert(hModel_ >= 0);*/
 }
 
 //XV
@@ -33,8 +33,8 @@ void Arrow::Update()
 //•`‰æ
 void Arrow::Draw()
 {
-    Model::SetTransform(hModel_, transform_);
-    Model::Draw(hModel_);
+   /* Model::SetTransform(hModel_, transform_);
+    Model::Draw(hModel_);*/
 }
 
 //ŠJ•ú
