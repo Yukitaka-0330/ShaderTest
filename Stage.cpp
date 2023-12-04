@@ -15,8 +15,8 @@ Stage::~Stage()
 //èâä˙âª
 void Stage::Initialize()
 {
-   /* hModel_ = Model::Load("Assets/Ground.fbx");
-    assert(hModel_ >= 0);*/
+    hModel_ = Model::Load("Assets/Ground.fbx");
+    assert(hModel_ >= 0);
 
     transform_.position_.y = -1;
     transform_.scale_.x = 10;
@@ -28,15 +28,13 @@ void Stage::Initialize()
 //çXêV
 void Stage::Update()
 {
-    
-
 }
 
 //ï`âÊ
 void Stage::Draw()
 {
-    /*Model::SetTransform(hModel_, transform_);
-    Model::Draw(hModel_);*/
+    Model::SetTransform(hModel_, transform_);
+    Model::Draw(hModel_);
 }
 
 //äJï˙
