@@ -1,10 +1,11 @@
+#if 0
 #include <assert.h>
 #include "Fbx.h"
 #include "Direct3D.h"
 #include "Camera.h"
 #include "Texture.h"
 
-const XMFLOAT4 LIGHTVEC = { 1,5,0,1 };
+const XMFLOAT4 LIGHTVEC = { 1,0.5f,0,1 };
 
 //ƒ|ƒCƒ“ƒ^•Ï”‚ÍƒŠƒŠ[ƒX
 //new‚ÍƒfƒŠ[‚Æ
@@ -195,8 +196,7 @@ void Fbx::PassDataToCB(Transform transform)//ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚ÉŠeíî•ñ‚ğ“n‚
 		CONSTANT_BUFFER cb;
 		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
-		cb.lightDirection = LIGHTVEC;
-		XMStoreFloat4(&cb.eyepos, Camera::GetEyePosition());
+		
 
 
 		if (i == 1) {
@@ -276,6 +276,8 @@ void Fbx::Draw(Transform& transform)
 		CONSTANT_BUFFER cb;
 		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
+		cb.lightPosition = LIGHTVEC;
+		XMStoreFloat4(&cb.eyepos, Camera::GetEyePosition());
 
 		if (i == 1) {
 			cb.diffuseColor = XMFLOAT4(1, 1, 1, 1);
@@ -324,4 +326,310 @@ void Fbx::Release()
 	SAFE_DELETE(pIndexBuffer_);
 	SAFE_RELEASE(pConstantBuffer_);
 	SAFE_DELETE(pMaterialList_);
+}
+
+#endif
+
+
+#include <assert.h>
+#include "Fbx.h"
+#include "Direct3D.h"
+#include "Camera.h"
+#include "Texture.h"
+
+//const XMFLOAT4 = LIGHTPOS{ 1,5,0,1 };
+Fbx::Fbx()//vertexCount_(0), polygonCount_(0),
+{
+}
+
+HRESULT Fbx::Load(std::string fileName)
+{
+	//ƒ}ƒl[ƒWƒƒ‚ğ¶¬
+	FbxManager* pFbxManager = FbxManager::Create();
+
+	//ƒCƒ“ƒ|[ƒ^[‚ğ¶¬
+	FbxImporter* fbxImporter = FbxImporter::Create(pFbxManager, "imp");
+	fbxImporter->Initialize(fileName.c_str(), -1, pFbxManager->GetIOSettings());
+
+	//ƒV[ƒ“ƒIƒuƒWƒFƒNƒg‚ÉFBXƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğ—¬‚µ‚Ş
+	FbxScene* pFbxScene = FbxScene::Create(pFbxManager, "fbxscene");
+	fbxImporter->Import(pFbxScene);
+	fbxImporter->Destroy();
+
+	//ƒƒbƒVƒ…î•ñ‚ğæ“¾
+	FbxNode* rootNode = pFbxScene->GetRootNode();
+	FbxNode* pNode = rootNode->GetChild(0);
+	FbxMesh* mesh = pNode->GetMesh();
+
+	//Šeî•ñ‚ÌŒÂ”‚ğæ“¾
+	vertexCount_ = mesh->GetControlPointsCount();   //’¸“_‚Ì”
+	polygonCount_ = mesh->GetPolygonCount();    //ƒ|ƒŠƒSƒ“‚Ì”
+	materialCount_ = pNode->GetMaterialCount();
+
+	//Œ»İ‚ÌƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ğæ“¾
+	char defaultCurrentDir[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, defaultCurrentDir);
+
+	//ˆø”‚ÌfileName‚©‚çƒfƒBƒŒƒNƒgƒŠ•”•ª‚ğæ“¾
+	char dir[MAX_PATH];
+	_splitpath_s(fileName.c_str(), nullptr, 0, dir, MAX_PATH, nullptr, 0, nullptr, 0);
+
+	//ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ•ÏX
+	SetCurrentDirectory(dir);
+
+	InitVertex(mesh);       //’¸“_ƒoƒbƒtƒ@€”õ
+	InitIndex(mesh);        //ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@€”õ
+	IntConstantBuffer();    //ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@€”õ
+	InitMaterial(pNode);
+
+	//ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ğŒ³‚É–ß‚·
+	SetCurrentDirectory(defaultCurrentDir);
+
+
+	//ƒ}ƒl[ƒWƒƒ‰ğ•ú
+	pFbxManager->Destroy();
+	return S_OK;
+}
+
+//’¸“_ƒoƒbƒtƒ@€”õ
+void Fbx::InitVertex(fbxsdk::FbxMesh* mesh)
+{
+	//’¸“_î•ñ‚ğ“ü‚ê‚é”z—ñ
+	VERTEX* vertices = new VERTEX[vertexCount_];
+
+	//‘Sƒ|ƒŠƒSƒ“
+	for (DWORD poly = 0; poly < polygonCount_; poly++)
+	{
+		//3’¸“_•ª
+		for (int vertex = 0; vertex < 3; vertex++)
+		{
+			//’²‚×‚é’¸“_‚Ì”Ô†
+			int index = mesh->GetPolygonVertex(poly, vertex);
+
+			//’¸“_‚ÌˆÊ’u
+			FbxVector4 pos = mesh->GetControlPointAt(index);
+			vertices[index].position = XMVectorSet((float)pos[0], (float)pos[1], (float)pos[2], 0.0f);
+
+			//’¸“_‚ÌUV
+			FbxLayerElementUV* pUV = mesh->GetLayer(0)->GetUVs();
+			int uvIndex = mesh->GetTextureUVIndex(poly, vertex, FbxLayerElement::eTextureDiffuse);
+			FbxVector2  uv = pUV->GetDirectArray().GetAt(uvIndex);
+			vertices[index].uv = XMVectorSet((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f, 0.0f);
+
+			//’¸“_‚Ì–@ü
+			FbxVector4 Normal;
+			mesh->GetPolygonVertexNormal(poly, vertex, Normal); //‚‰”Ô–Ú‚Ìƒ|ƒŠƒSƒ“‚ÌA‚Š”Ô–Ú‚Ì’¸“_‚Ì–@ü‚ğƒQƒbƒg
+			vertices[index].normal = XMVectorSet((float)Normal[0], (float)Normal[1], (float)Normal[2], 0.0f);
+		}
+	}
+
+	//’¸“_ƒoƒbƒtƒ@
+	HRESULT hr;
+	D3D11_BUFFER_DESC bd_vertex;
+	bd_vertex.ByteWidth = sizeof(VERTEX) * vertexCount_;
+	bd_vertex.Usage = D3D11_USAGE_DEFAULT;
+	bd_vertex.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd_vertex.CPUAccessFlags = 0;
+	bd_vertex.MiscFlags = 0;
+	bd_vertex.StructureByteStride = 0;
+	D3D11_SUBRESOURCE_DATA data_vertex;
+	data_vertex.pSysMem = vertices;
+	hr = Direct3D::pDevice_->CreateBuffer(&bd_vertex, &data_vertex, &pVertexBuffer_);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, "’¸“_ƒoƒbƒtƒ@‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½", "ƒGƒ‰[", MB_OK);
+	}
+}
+
+
+
+//ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@€”õ
+void Fbx::InitIndex(fbxsdk::FbxMesh* mesh)
+{
+	pIndexBuffer_ = new ID3D11Buffer * [materialCount_];
+
+	int* index = new int[polygonCount_ * 3];
+
+	indexCount_ = new int[materialCount_];
+
+	for (int i = 0; i < materialCount_; i++)
+	{
+
+		int count = 0;
+
+		//‘Sƒ|ƒŠƒSƒ“
+		for (DWORD poly = 0; poly < polygonCount_; poly++)
+		{
+			FbxLayerElementMaterial* mtl = mesh->GetLayer(0)->GetMaterials();
+			int mtlId = mtl->GetIndexArray().GetAt(poly);
+
+			if (mtlId == i)
+			{
+				//3’¸“_•ª
+				for (DWORD vertex = 0; vertex < 3; vertex++)
+				{
+					index[count] = mesh->GetPolygonVertex(poly, vertex);
+					count++;
+				}
+			}
+		}
+		indexCount_[i] = count;
+		D3D11_BUFFER_DESC   bd;
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(int) * polygonCount_ * 3;
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+		bd.MiscFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA InitData;
+		InitData.pSysMem = index;
+		InitData.SysMemPitch = 0;
+		InitData.SysMemSlicePitch = 0;
+
+		HRESULT hr;
+		hr = Direct3D::pDevice_->CreateBuffer(&bd, &InitData, &pIndexBuffer_[i]);
+		if (FAILED(hr))
+		{
+			MessageBox(NULL, "ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½", "ƒGƒ‰[", MB_OK);
+		}
+	}
+}
+
+void Fbx::IntConstantBuffer()
+{
+	D3D11_BUFFER_DESC cb;
+	cb.ByteWidth = sizeof(CONSTANT_BUFFER);
+	cb.Usage = D3D11_USAGE_DYNAMIC;
+	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cb.MiscFlags = 0;
+	cb.StructureByteStride = 0;
+
+	// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚Ìì¬
+	HRESULT hr;
+	hr = Direct3D::pDevice_->CreateBuffer(&cb, nullptr, &pConstantBuffer_);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, "ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½", "ƒGƒ‰[", MB_OK);
+	}
+}
+
+void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
+{
+	pMaterialList_ = new MATERIAL[materialCount_];
+
+	for (int i = 0; i < materialCount_; i++)
+	{
+		//i”Ô–Ú‚Ìƒ}ƒeƒŠƒAƒ‹î•ñ‚ğæ“¾
+		FbxSurfaceMaterial* pMaterial = pNode->GetMaterial(i);
+
+		//ƒeƒNƒXƒ`ƒƒî•ñ
+		FbxProperty  lProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
+
+		//ƒeƒNƒXƒ`ƒƒ‚Ì””
+		int fileTextureCount = lProperty.GetSrcObjectCount<FbxFileTexture>();
+
+		//ƒeƒNƒXƒ`ƒƒ‚ ‚è
+		if (fileTextureCount)
+		{
+			FbxFileTexture* textureInfo = lProperty.GetSrcObject<FbxFileTexture>(0);
+			const char* textureFilePath = textureInfo->GetRelativeFileName();
+
+			//ƒtƒ@ƒCƒ‹–¼+Šg’£‚¾‚¯‚É‚·‚é
+			char name[_MAX_FNAME];  //ƒtƒ@ƒCƒ‹–¼
+			char ext[_MAX_EXT]; //Šg’£q
+			_splitpath_s(textureFilePath, nullptr, 0, nullptr, 0, name, _MAX_FNAME, ext, _MAX_EXT);
+			wsprintf(name, "%s%s", name, ext);
+
+			//ƒtƒ@ƒCƒ‹‚©‚çƒeƒNƒXƒ`ƒƒì¬
+			pMaterialList_[i].pTexture = new Texture;
+			HRESULT hr = pMaterialList_[i].pTexture->Load(name);
+			assert(hr == S_OK);
+		}
+
+		//ƒeƒNƒXƒ`ƒƒ–³‚µ
+		else
+		{
+			pMaterialList_[i].pTexture = nullptr;
+
+			//ƒ}ƒeƒŠƒAƒ‹‚ÌF
+			FbxSurfaceLambert* pMaterial = (FbxSurfaceLambert*)pNode->GetMaterial(i);
+			FbxDouble3  diffuse = pMaterial->Diffuse;
+			pMaterialList_[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
+		}
+	}
+}
+
+void Fbx::Draw(Transform& transform)
+{
+	Direct3D::SetShader(SHADER_3D);
+	transform.Calclation();//ƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚ğŒvZ
+	//ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚Éî•ñ‚ğ“n‚·
+	for (int i = 0; i < materialCount_; i++)
+	{
+		CONSTANT_BUFFER cb;
+		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
+		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
+		cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
+		cb.diffuseColor = pMaterialList_[i].diffuse;
+		cb.lightDirection = XMFLOAT4(1, 1, 0, 1);
+		XMStoreFloat4(&cb.eyePos, Camera::GetEyePosition());
+		cb.isTextured = pMaterialList_[i].pTexture != nullptr;
+		/*cb.diffuseColor = XMFLOAT4(1, 1, 1, 1);
+		cb.isTextured = pMaterialList_[i].pTexture != nullptr;*/
+
+
+
+
+
+
+
+
+
+
+		D3D11_MAPPED_SUBRESOURCE pdata;
+		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);  // GPU‚©‚ç‚Ìƒf[ƒ^ƒAƒNƒZƒX‚ğ~‚ß‚é
+		memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));    // ƒf[ƒ^‚ğ’l‚ğ‘—‚é
+
+
+
+		Direct3D::pContext_->Unmap(pConstantBuffer_, 0);    //ÄŠJ
+
+
+
+		//’¸“_ƒoƒbƒtƒ@AƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@AƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚ğƒpƒCƒvƒ‰ƒCƒ“‚ÉƒZƒbƒg
+		//’¸“_ƒoƒbƒtƒ@
+		UINT stride = sizeof(VERTEX);
+		UINT offset = 0;
+		Direct3D::pContext_->IASetVertexBuffers(0, 1, &pVertexBuffer_, &stride, &offset);
+
+
+
+
+		// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@[‚ğƒZƒbƒg
+		stride = sizeof(int);
+		offset = 0;
+		Direct3D::pContext_->IASetIndexBuffer(pIndexBuffer_[i], DXGI_FORMAT_R32_UINT, 0);
+
+		//ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@
+		Direct3D::pContext_->VSSetConstantBuffers(0, 1, &pConstantBuffer_); //’¸“_ƒVƒF[ƒ_[—p  
+		Direct3D::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_); //ƒsƒNƒZƒ‹ƒVƒF[ƒ_[—p
+
+		if (pMaterialList_[i].pTexture)
+		{
+			ID3D11SamplerState* pSampler = pMaterialList_[i].pTexture->GetSampler();
+			Direct3D::pContext_->PSSetSamplers(0, 1, &pSampler);
+			ID3D11ShaderResourceView* pSRV = pMaterialList_[i].pTexture->GetSRV();
+			Direct3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
+		}
+
+		//•`‰æ
+		Direct3D::pContext_->DrawIndexed(indexCount_[i], 0, 0);
+	}
+
+
+}
+
+void Fbx::Release()
+{
 }
