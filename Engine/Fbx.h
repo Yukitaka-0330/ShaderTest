@@ -1,4 +1,4 @@
-#if 0
+#if 1
 #pragma once
 #include <d3d11.h>
 #include <fbxsdk.h>
@@ -28,6 +28,8 @@ class Fbx
 		XMFLOAT4	lightPosition;//ライトの方向
 		XMFLOAT4	eyepos;
 		BOOL		isTexture;
+
+		FLOAT shininess; //ハイライトの強さ
 	};
 	struct VERTEX
 	{
@@ -38,7 +40,9 @@ class Fbx
 	struct MATERIAL //マテリアル
 	{
 		Texture* pTexture;
-		XMFLOAT4	diffuse;
+		XMFLOAT4 diffuse;
+		XMFLOAT4 ambient;
+		XMFLOAT4 specular;
 	};
 
 	ID3D11Buffer* pVertexBuffer_;
@@ -72,7 +76,8 @@ public:
 
 	
 };
-#endif
+
+#else
 
 
 #pragma once
@@ -139,6 +144,8 @@ public:
 	void    Draw(Transform& transform);
 	void    Release();
 };
+
+#endif
 
 
 

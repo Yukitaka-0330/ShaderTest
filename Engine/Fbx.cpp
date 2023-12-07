@@ -1,4 +1,4 @@
-#if 0
+#if 1
 #include <assert.h>
 #include "Fbx.h"
 #include "Direct3D.h"
@@ -328,8 +328,7 @@ void Fbx::Release()
 	SAFE_DELETE(pMaterialList_);
 }
 
-#endif
-
+#else
 
 #include <assert.h>
 #include "Fbx.h"
@@ -578,24 +577,11 @@ void Fbx::Draw(Transform& transform)
 		/*cb.diffuseColor = XMFLOAT4(1, 1, 1, 1);
 		cb.isTextured = pMaterialList_[i].pTexture != nullptr;*/
 
-
-
-
-
-
-
-
-
-
 		D3D11_MAPPED_SUBRESOURCE pdata;
 		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);  // GPUからのデータアクセスを止める
 		memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));    // データを値を送る
 
-
-
 		Direct3D::pContext_->Unmap(pConstantBuffer_, 0);    //再開
-
-
 
 		//頂点バッファ、インデックスバッファ、コンスタントバッファをパイプラインにセット
 		//頂点バッファ
@@ -633,3 +619,5 @@ void Fbx::Draw(Transform& transform)
 void Fbx::Release()
 {
 }
+
+#endif
