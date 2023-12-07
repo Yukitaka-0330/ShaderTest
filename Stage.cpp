@@ -23,7 +23,6 @@ void Stage::Initialize()
     transform_.scale_.x = 10;
     transform_.scale_.y = 10;
     transform_.scale_.z = 10;
-
 }
 
 //çXêV
@@ -39,7 +38,7 @@ void Stage::Update()
 
     if (Input::IsKey(DIK_A))
     {
-        t.position_.x += 0.5f;
+        t.position_.x -= 0.5f;
     }
 
     if (Input::IsKey(DIK_S))
@@ -49,7 +48,7 @@ void Stage::Update()
 
     if (Input::IsKey(DIK_D))
     {
-        t.position_.x -= 0.5f;
+        t.position_.x += 0.5f;
     }
 
     float wValue = 1.0f;

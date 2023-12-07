@@ -1,4 +1,4 @@
-#if 1
+#if 0
 #include <assert.h>
 #include "Fbx.h"
 #include "Direct3D.h"
@@ -335,6 +335,7 @@ void Fbx::Release()
 #include "Direct3D.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "../LightPosController.h"
 
 //const XMFLOAT4 = LIGHTPOS{ 1,5,0,1 };
 Fbx::Fbx()//vertexCount_(0), polygonCount_(0),
@@ -571,7 +572,8 @@ void Fbx::Draw(Transform& transform)
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 		cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
 		cb.diffuseColor = pMaterialList_[i].diffuse;
-		cb.lightDirection = XMFLOAT4(1, 2, 1, 1);
+		//cb.lightDirection = XMFLOAT4(1, 2, 1, 1);
+		cb.lightDirection = LightPosController::GetLightPosition();
 		XMStoreFloat4(&cb.eyePos, Camera::GetEyePosition());
 		cb.isTextured = pMaterialList_[i].pTexture != nullptr;
 		/*cb.diffuseColor = XMFLOAT4(1, 1, 1, 1);
