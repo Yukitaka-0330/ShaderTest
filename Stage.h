@@ -5,7 +5,7 @@
 
 struct CBUFF_STAGESCENE
 {
-    XMFLOAT4    lightDirection;
+    XMFLOAT4    lightPosition;
     XMFLOAT4    eyePos;
 };
 
