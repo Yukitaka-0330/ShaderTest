@@ -10,6 +10,8 @@ Transform::Transform()
 	matRotate_ = XMMatrixIdentity();
 	matScale_ = XMMatrixIdentity();
 
+
+
 }
 
 Transform::~Transform()
