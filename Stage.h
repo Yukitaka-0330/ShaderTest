@@ -3,12 +3,24 @@
 #include "ColorBall.h"
 #include "LightPosController.h"
 
+struct CBUFF_STAGESCENE
+{
+    XMFLOAT4    lightDirection;
+    XMFLOAT4    eyePos;
+};
+
 //◆◆◆を管理するクラス
 class Stage : public GameObject
 {
-public:
     int hModel_;
     Transform t;
+
+    void InitConstantBuffer();
+    XMFLOAT4 lightSourcePosition_;
+    ID3D11Buffer* pCBStageScene;
+
+public:
+    
     //コンストラクタ
     Stage(GameObject* parent);
 
@@ -37,6 +49,16 @@ public:
     DirectX::XMFLOAT4 ConvertFloat3ToFloat4(const DirectX::XMFLOAT3& float3Value, float wValue)
     {
         return DirectX::XMFLOAT4(float3Value.x, float3Value.y, float3Value.z, wValue);
+    }
+
+    void SetLightPos(XMFLOAT4& _pos)
+    {
+        lightSourcePosition_ = _pos;
+    }
+
+    XMFLOAT4 GetLightPos()
+    {
+        return(lightSourcePosition_);
     }
 
 };

@@ -1,11 +1,29 @@
 #include "Stage.h"
 #include "Engine/Input.h"
 #include "Engine/Model.h"
+#include "Engine/Camera.h"
+#include <d3d11.h>
+
+void Stage::InitConstantBuffer()
+{
+    D3D11_BUFFER_DESC cb;
+    cb.ByteWidth = sizeof(CBUFF_STAGESCENE);
+    cb.Usage = D3D11_USAGE_DEFAULT;
+    cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cb.CPUAccessFlags = 0;
+    cb.MiscFlags = 0;
+    cb.StructureByteStride = 0;
+    
+    Direct3D::pDevice_->CreateBuffer(&cb, nullptr, &pCBStageScene);
+
+}
 
 //コンストラクタ
 Stage::Stage(GameObject* parent)
     :GameObject(parent, "Stage"), hModel_(-1)
 {
+    lightSourcePosition_ = { 1,1,1,0 };
+    pCBStageScene = nullptr;
 }
 
 //デストラクタ
@@ -23,6 +41,8 @@ void Stage::Initialize()
     transform_.scale_.x = 10;
     transform_.scale_.y = 10;
     transform_.scale_.z = 10;
+
+    InitConstantBuffer();
 }
 
 //更新
@@ -53,6 +73,16 @@ void Stage::Update()
 
     float wValue = 1.0f;
     LightPosController::SetLightPosition(ConvertFloat3ToFloat4(t.position_ , wValue));
+
+    CBUFF_STAGESCENE cb;
+    cb.lightDirection = lightSourcePosition_;
+    XMStoreFloat4(&cb.eyePos, Camera::GetEyePosition());
+
+    InitConstantBuffer();
+    //Direct3D::pContext_->UpdateSubresource(pCBStageScene, 0, NULL, &cb, 0, 0);
+
+    Direct3D::pContext_->VSSetConstantBuffers(1, 1, &pCBStageScene); //頂点シェーダ
+    Direct3D::pContext_->PSSetConstantBuffers(1, 1, &pCBStageScene); //ピクセルシェーダ
 
 }
 
