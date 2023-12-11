@@ -73,7 +73,8 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 ambentSource = float4(0.2, 0.2, 0.2, 1.0); //•¨‘Ì‚ª‚Ç‚ê‚¾‚¯ŠÂ‹«Œõ‚ğ”½Ë‚Ü‚½‚Í•úË‚·‚é‚©‚ğ§Œä‚·‚é
 	float4 diffuse;
 	float4 ambient;
-	float4 NL = saturate(dot(inData.normal, normalize(lightPosition)));
+	float4 NL = dot(inData.normal, normalize(lightPosition));
+	//float4 NL = saturate(dot(inData.normal, normalize(lightPosition)));
 
 	float4 reflect = normalize(2 * NL * inData.normal - normalize(lightPosition));
 	float4 specular = pow(saturate(dot(reflect, normalize(inData.eyev))), 8);

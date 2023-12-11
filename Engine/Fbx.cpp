@@ -568,6 +568,7 @@ void Fbx::Draw(Transform& transform)
 	for (int i = 0; i < materialCount_; i++)
 	{
 		CONSTANT_BUFFER cb;
+		LIGHTING lg;
 		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 		cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
@@ -577,6 +578,10 @@ void Fbx::Draw(Transform& transform)
 		/*cb.lightDirection = LightPosController::GetLightPosition();
 		XMStoreFloat4(&cb.eyePos, Camera::GetEyePosition());
 		cb.isTextured = pMaterialList_[i].pTexture != nullptr;*/
+
+		lg.lightDirection = LightPosController::GetLightPosition();
+		XMStoreFloat4(&lg.eyePos, Camera::GetEyePosition());
+		cb.isTextured = pMaterialList_[i].pTexture != nullptr;
 
 		//cb.diffuseColor = XMFLOAT4(1, 1, 1, 1);
 		cb.isTextured = pMaterialList_[i].pTexture != nullptr;
