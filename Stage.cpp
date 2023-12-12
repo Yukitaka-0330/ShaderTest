@@ -62,32 +62,6 @@ void Stage::Initialize()
 //çXêV
 void Stage::Update()
 {
-    //åıåπÇ©ÇÁÇÃà íuÇWASDÇ≈êßå‰
-   // t.position_ = ConvertFloat4ToFloat3(LightPosController::GetLightPosition());
-
-    /*if (Input::IsKey(DIK_W))
-    {
-        t.position_.z += 0.5f;
-    }
-
-    if (Input::IsKey(DIK_A))
-    {
-        t.position_.x -= 0.5f;
-    }
-
-    if (Input::IsKey(DIK_S))
-    {
-        t.position_.z -= 0.5f;
-    }
-
-    if (Input::IsKey(DIK_D))
-    {
-        t.position_.x += 0.5f;
-    }*/
-
-   /* float wValue = 1.0f;
-    LightPosController::SetLightPosition(ConvertFloat3ToFloat4(t.position_ , wValue));*/
-
     if (Input::IsKey(DIK_W))
     {
         XMFLOAT4 p = GetLightPos();
