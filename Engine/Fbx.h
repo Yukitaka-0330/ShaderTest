@@ -116,12 +116,6 @@ class Fbx
 
 	};
 
-	struct LIGHTING
-	{
-		XMFLOAT4    lightDirection;
-		XMFLOAT4    eyePos;
-	};
-
 	struct VERTEX
 	{
 		XMVECTOR position;

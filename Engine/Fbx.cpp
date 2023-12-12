@@ -579,9 +579,6 @@ void Fbx::Draw(Transform& transform)
 		XMStoreFloat4(&cb.eyePos, Camera::GetEyePosition());
 		cb.isTextured = pMaterialList_[i].pTexture != nullptr;*/
 
-		lg.lightDirection = LightPosController::GetLightPosition();
-		XMStoreFloat4(&lg.eyePos, Camera::GetEyePosition());
-		cb.isTextured = pMaterialList_[i].pTexture != nullptr;
 
 		//cb.diffuseColor = XMFLOAT4(1, 1, 1, 1);
 		cb.isTextured = pMaterialList_[i].pTexture != nullptr;
