@@ -13,11 +13,13 @@ struct CBUFF_STAGESCENE
 class Stage : public GameObject
 {
     int hModel_;
-    Transform t;
+    int hLightBall_;
+    Transform trLight;
+    ID3D11Buffer* pCBStageScene;
+
 
     void InitConstantBuffer();
     XMFLOAT4 lightSourcePosition_;
-    ID3D11Buffer* pCBStageScene;
 
 public:
     

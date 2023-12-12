@@ -498,7 +498,7 @@ void Fbx::InitIndex(fbxsdk::FbxMesh* mesh)
 void Fbx::IntConstantBuffer()
 {
 	D3D11_BUFFER_DESC cb;
-	cb.ByteWidth = sizeof(CONSTANT_BUFFER);
+	cb.ByteWidth = sizeof(CBUFF_MODEL);
 	cb.Usage = D3D11_USAGE_DYNAMIC;
 	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -567,8 +567,7 @@ void Fbx::Draw(Transform& transform)
 	//コンスタントバッファに情報を渡す
 	for (int i = 0; i < materialCount_; i++)
 	{
-		CONSTANT_BUFFER cb;
-		LIGHTING lg;
+		CBUFF_MODEL cb;
 		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 		cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());

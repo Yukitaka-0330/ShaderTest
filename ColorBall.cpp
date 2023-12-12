@@ -15,18 +15,19 @@ ColorBall::~ColorBall()
 //èâä˙âª
 void ColorBall::Initialize()
 {
-    hModel_ = Model::Load("Assets/Ball2.fbx");
+    hModel_ = Model::Load("Assets/Donut.fbx");
     assert(hModel_ >= 0);
 
     transform_.position_.x = 3;
+    transform_.position_.y = 2;
     //transform_.rotate_.x = -90;
-    //transform_.scale_ = { 5,5,5 };
+    transform_.scale_ = { 0.5,0.5,0.5 };
 }
 
 //çXêV
 void ColorBall::Update()
 {
-    transform_.rotate_.y += 1;
+    //transform_.rotate_.y += 1;
 }
 
 //ï`âÊ
