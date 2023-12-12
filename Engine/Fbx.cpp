@@ -521,8 +521,23 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 	for (int i = 0; i < materialCount_; i++)
 	{
 		//i番目のマテリアル情報を取得
-		FbxSurfaceMaterial* pMaterial = pNode->GetMaterial(i);
+		//FbxSurfaceMaterial* pMaterial = pNode->GetMaterial(i);
+		FbxSurfacePhong* pMaterial = (FbxSurfacePhong*)(pNode->GetMaterial(i));
+		FbxDouble3 diffuse = pMaterial->Diffuse;
+		FbxDouble3 ambient = pMaterial->Ambient;
 
+		if (pMaterial->GetClassId().Is(FbxSurfacePhong::ClassId))
+		{
+			FbxDouble3 specular = pMaterial->Specular;
+			FbxDouble shiness = pMaterial->Shininess;
+
+			pMaterialList_[i].specular = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
+			pMaterialList_[i].shiness = (float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f;
+		}
+		
+		pMaterialList_[i].diffuse = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
+		pMaterialList_[i].amibent = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
+		pMaterialList_[i].pTexture = nullptr;
 		//テクスチャ情報
 		FbxProperty  lProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
 
@@ -547,16 +562,6 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 			assert(hr == S_OK);
 		}
 
-		//テクスチャ無し
-		else
-		{
-			pMaterialList_[i].pTexture = nullptr;
-
-			//マテリアルの色
-			FbxSurfaceLambert* pMaterial = (FbxSurfaceLambert*)pNode->GetMaterial(i);
-			FbxDouble3  diffuse = pMaterial->Diffuse;
-			pMaterialList_[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
-		}
 	}
 }
 

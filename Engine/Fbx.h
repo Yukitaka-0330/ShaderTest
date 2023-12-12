@@ -102,6 +102,9 @@ class Fbx
 	{
 		Texture* pTexture;
 		XMFLOAT4    diffuse;
+		XMFLOAT4	amibent;
+		XMFLOAT4	specular;
+		float	shiness;
 	};
 
 	struct CBUFF_MODEL
