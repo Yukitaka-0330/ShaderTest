@@ -516,6 +516,7 @@ void Fbx::IntConstantBuffer()
 
 void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 {
+	static const int INITIALIZE_SHINESS = 1;
 	pMaterialList_ = new MATERIAL[materialCount_];
 
 	for (int i = 0; i < materialCount_; i++)
@@ -525,18 +526,21 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 		FbxSurfacePhong* pMaterial = (FbxSurfacePhong*)(pNode->GetMaterial(i));
 
 		FbxDouble3 diffuse = pMaterial->Diffuse;
-		pMaterialList_[i].diffuse = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
-
 		FbxDouble3 ambient = pMaterial->Ambient;
-		pMaterialList_[i].amibent = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
+		
+		pMaterialList_[i].diffuse = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
+		pMaterialList_[i].amibent = XMFLOAT4{ (float)ambient[0],(float)ambient[1],(float)ambient[2],1.0f };
+		pMaterialList_[i].specular = XMFLOAT4(0, 0, 0, 0); //とりあえずハイライトは黒
+		pMaterialList_[i].shiness = INITIALIZE_SHINESS;
 
 		if (pMaterial->GetClassId().Is(FbxSurfacePhong::ClassId))
 		{
+			//Mayaで指定したSpecularColorの情報
 			FbxDouble3 specular = pMaterial->Specular;
-			pMaterialList_[i].specular = XMFLOAT4{ (float)diffuse[0],(float)diffuse[1],(float)diffuse[2],1.0f };
+			pMaterialList_[i].specular = XMFLOAT4{ (float)specular[0],(float)specular[1],(float)specular[2],1.0f };
 
 			FbxDouble shiness = pMaterial->Shininess;
-			pMaterialList_[i].shiness = (float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f;
+			pMaterialList_[i].shiness = (float)shiness;
 		}
 		pMaterialList_[i].pTexture = nullptr;
 
@@ -578,7 +582,13 @@ void Fbx::Draw(Transform& transform)
 		cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 		cb.matNormal = XMMatrixTranspose(transform.GetNormalMatrix());
 		cb.matW = XMMatrixTranspose(transform.GetWorldMatrix());
+
 		cb.diffuseColor = pMaterialList_[i].diffuse;
+		cb.ambientColor = pMaterialList_[i].amibent;
+		cb.specularColor = pMaterialList_[i].specular;
+		cb.shiness = pMaterialList_[i].shiness;
+
+
 		//cb.lightDirection = XMFLOAT4(1, 2, 1, 1);
 
 		/*cb.lightDirection = LightPosController::GetLightPosition();

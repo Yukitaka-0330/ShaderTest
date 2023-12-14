@@ -14,6 +14,9 @@ cbuffer global:register (b0)
 	float4x4	matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	matNormal;		//法線
 	float4		diffuseColor;	// ディフューズカラー（マテリアルの色）
+	float4		ambientColor;
+	float4		specularColor;
+	float		shiness;
 	bool		isTexture;		// テクスチャ貼ってあるかどうか
 };
 
@@ -70,14 +73,14 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 float4 PS(VS_OUT inData) : SV_Target
 {
 	float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);
-	float4 ambentSource = float4(0.2, 0.2, 0.2, 1.0); //物体がどれだけ環境光を反射または放射するかを制御する
+	float4 ambentSource = ambientColor;
 	float4 diffuse;
 	float4 ambient;
 	float4 NL = dot(inData.normal, normalize(lightPosition));
 	//float4 NL = saturate(dot(inData.normal, normalize(lightPosition)));
 
 	float4 reflect = normalize(2 * NL * inData.normal - normalize(lightPosition));
-	float4 specular = pow(saturate(dot(reflect, normalize(inData.eyev))), 8);
+	float4 specular = pow(saturate(dot(reflect, normalize(inData.eyev))), shiness) * specularColor;
 
 	if (isTexture == false)
 	{
@@ -91,4 +94,6 @@ float4 PS(VS_OUT inData) : SV_Target
 	}
 
     return diffuse + ambient + specular;
+	//return shiness /100.0f;
+	
 }

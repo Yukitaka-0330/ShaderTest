@@ -113,8 +113,9 @@ class Fbx
 		XMMATRIX    matWVP;//ワールドビュープロジェクション
 		XMMATRIX    matNormal; //逆行列
 		XMFLOAT4    diffuseColor;   //面の色
-		//XMFLOAT4    lightDirection;
-		//XMFLOAT4    eyePos;
+		XMFLOAT4	ambientColor;
+		XMFLOAT4	specularColor;
+		FLOAT		shiness;
 		BOOL    isTextured;// ディフューズカラー（マテリアルの色）
 
 	};
