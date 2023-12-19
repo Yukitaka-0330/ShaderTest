@@ -21,6 +21,7 @@ void Arrow::Initialize()
     transform_.scale_.x = 1;
     transform_.scale_.y = 1;
     transform_.position_.z = -3;
+    //transform_.rotate_.z = -90;
 }
 
 //çXêV

@@ -100,7 +100,7 @@ class Fbx
 	//ƒ}ƒeƒŠƒAƒ‹
 	struct MATERIAL
 	{
-		Texture* pTexture;
+		Texture*	pTexture;
 		XMFLOAT4    diffuse;
 		XMFLOAT4	amibent;
 		XMFLOAT4	specular;
@@ -141,6 +141,7 @@ class Fbx
 	void InitIndex(fbxsdk::FbxMesh* mesh);
 	void IntConstantBuffer();
 	void InitMaterial(fbxsdk::FbxNode* pNode);
+	Texture* pToonTex_;
 public:
 
 	Fbx();

@@ -385,10 +385,18 @@ HRESULT Fbx::Load(std::string fileName)
 	//カレントディレクトリを元に戻す
 	SetCurrentDirectory(defaultCurrentDir);
 
-
+	
 	//マネージャ解放
 	pFbxManager->Destroy();
+
+
+	//ToonShaderで使う画像の読み込み
+	pToonTex_ = new Texture;
+	pToonTex_->Load("Assets\\Gradation conversion.png");
+
 	return S_OK;
+
+	
 }
 
 //頂点バッファ準備
@@ -633,6 +641,8 @@ void Fbx::Draw(Transform& transform)
 			ID3D11ShaderResourceView* pSRV = pMaterialList_[i].pTexture->GetSRV();
 			Direct3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
 		}
+		ID3D11ShaderResourceView* pSRVToon = pToonTex_->GetSRV();
+		Direct3D::pContext_->PSSetShaderResources(1, 1, &pSRVToon);
 
 		//描画
 		Direct3D::pContext_->DrawIndexed(indexCount_[i], 0, 0);
