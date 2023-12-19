@@ -392,7 +392,7 @@ HRESULT Fbx::Load(std::string fileName)
 
 	//ToonShader‚ÅŽg‚¤‰æ‘œ‚Ì“Ç‚Ýž‚Ý
 	pToonTex_ = new Texture;
-	pToonTex_->Load("Assets\\Gradation conversion.png");
+	pToonTex_->Load("Assets\\Gradation conversion2.png");
 
 	return S_OK;
 

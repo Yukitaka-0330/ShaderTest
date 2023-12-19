@@ -27,7 +27,7 @@ void ColorBall::Initialize()
 //çXêV
 void ColorBall::Update()
 {
-    //transform_.rotate_.y += 1;
+    transform_.rotate_.y += 1;
 }
 
 //ï`âÊ
