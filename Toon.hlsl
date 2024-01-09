@@ -49,6 +49,9 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 	VS_OUT outData = (VS_OUT)0;
 	//ローカル座標に、ワールド・ビュー・プロジェクション行列をかけて
 	//スクリーン座標に変換し、ピクセルシェーダーへ
+
+	pos = pos + normal * 0.15;
+
 	outData.pos = mul(pos, matWVP);
 	outData.uv = uv;
 	normal.w = 0;
@@ -127,14 +130,14 @@ float4 PS(VS_OUT inData) : SV_Target
 		ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambentSource;
 	}
 
-	/*if (abs(dot(inData.normal,normalize(inData.eyev))) < 0.4f)
+	if (abs(dot(inData.normal,normalize(inData.eyev))) < 0.4f)
 	{
 		return float4(0, 0, 0, 1);
 	}
 	else
 	{
 		return float4 (1, 1, 1, 1);
-	}*/
+	}
 
 	return diffuse + ambient;
 
