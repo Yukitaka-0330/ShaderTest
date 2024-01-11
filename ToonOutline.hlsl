@@ -88,30 +88,18 @@ float4 PS(VS_OUT inData) : SV_Target
 	float2 uv;
 	uv.x = abs(dot(inData.normal, normalize(inData.eyev)));
 	uv.y = abs(dot(inData.normal, normalize(inData.eyev)));
-	//float4 tI = g_toon_texture.Sample(g_sampler, uv);
+	float4 tI = g_toon_texture.Sample(g_sampler, uv);
 
 	if (isTexture == false)
 	{
-		//diffuse = lightSource * diffuseColor * tI;
-		diffuse = lightSource * diffuseColor;
+		diffuse = lightSource * diffuseColor * tI;
 		ambient = lightSource * diffuseColor * ambentSource;
 	}
 	else
 	{
-		//diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * tI;
-		diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv);
+		diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * tI;
 		ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambentSource;
 	}
 
-	/*if (abs(dot(inData.normal,normalize(inData.eyev))) < 0.4f)
-	{
-		return float4(0, 0, 0, 1);
-	}
-	else
-	{
-		return float4 (1, 1, 1, 1);
-	}*/
-
 	return diffuse + ambient;
-
 }
