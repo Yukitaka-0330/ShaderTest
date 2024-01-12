@@ -101,5 +101,10 @@ float4 PS(VS_OUT inData) : SV_Target
 		ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambentSource;
 	}
 
-	return diffuse + ambient;
+	if (abs(dot(normalize(inData.eyev), inData.normal)) < 0.2f)
+	{
+		return float4(0, 0, 0, 1);
+	}
+	else
+		return diffuse + ambient;
 }
