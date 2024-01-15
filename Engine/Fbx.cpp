@@ -583,7 +583,8 @@ void Fbx::Draw(Transform& transform)
 {
 	//Direct3D::SetShader(SHADER_3D);
 	//Direct3D::SetShader(SHADER_TOON);
-	Direct3D::SetShader(SHADER_TOONOUTLINE);
+	//Direct3D::SetShader(SHADER_TOONOUTLINE);
+	Direct3D::SetShader(SHADER_NORMALMAP);
 	transform.Calclation();//トランスフォームを計算
 	//コンスタントバッファに情報を渡す
 	for (int i = 0; i < materialCount_; i++)

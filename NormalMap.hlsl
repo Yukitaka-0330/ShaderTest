@@ -4,7 +4,6 @@
 Texture2D	g_texture : register(t0);	//テクスチャー
 SamplerState	g_sampler : register(s0);	//サンプラー
 
-Texture2D	g_toon_texture : register(t1);//トゥーンシェーディング用のテクスチャ
 //───────────────────────────────────────
  // コンスタントバッファ
 // DirectX 側から送信されてくる、ポリゴン頂点以外の諸情報の定義
@@ -49,9 +48,6 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 	VS_OUT outData = (VS_OUT)0;
 	//ローカル座標に、ワールド・ビュー・プロジェクション行列をかけて
 	//スクリーン座標に変換し、ピクセルシェーダーへ
-
-	pos = pos + normal * 0.15;
-
 	outData.pos = mul(pos, matWVP);
 	outData.uv = uv;
 	normal.w = 0;
@@ -81,30 +77,23 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 diffuse;
 	float4 ambient;
 	float4 NL = dot(inData.normal, normalize(lightPosition));
+	//float4 NL = saturate(dot(inData.normal, normalize(lightPosition)));
 
 	float4 reflect = normalize(2 * NL * inData.normal - normalize(lightPosition));
 	float4 specular = pow(saturate(dot(reflect, normalize(inData.eyev))), shiness) * specularColor;
 
-	float2 uv;
-	uv.x = abs(dot(inData.normal, normalize(inData.eyev)));
-	uv.y = abs(dot(inData.normal, normalize(inData.eyev)));
-	float4 tI = g_toon_texture.Sample(g_sampler, uv);
-
 	if (isTexture == false)
 	{
-		diffuse = lightSource * diffuseColor * tI;
+		diffuse = lightSource * diffuseColor * inData.color;
 		ambient = lightSource * diffuseColor * ambentSource;
 	}
 	else
 	{
-		diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * tI;
+		diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
 		ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambentSource;
 	}
 
-	if (abs(dot(normalize(inData.eyev), inData.normal)) < 0.2f)
-	{
-		return float4(0, 0, 0, 1);
-	}
-	else
-		return diffuse + ambient;
+	return diffuse + ambient + specular;
+	//return shiness /100.0f;
+
 }
