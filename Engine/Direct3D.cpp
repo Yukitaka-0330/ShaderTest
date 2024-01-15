@@ -411,6 +411,7 @@ HRESULT Direct3D::InitTonnOutLine()
         //エラー処理
         MessageBox(nullptr, "ラスタライザの作成に失敗しました", "エラー", MB_OK);
         return hr;
+        //return E_FAIL;
     }
     return S_OK;
 }
