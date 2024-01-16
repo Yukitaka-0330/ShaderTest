@@ -433,15 +433,29 @@ void Fbx::InitVertex(fbxsdk::FbxMesh* mesh)
 
 	for (int i = 0; i < polygonCount_; i++)
 	{
+		mesh->GetElementTangentCount();//これが0なんだなぁ
 		int sIndex = mesh->GetPolygonVertexIndex(i);
 		FbxGeometryElementTangent* tangent = mesh->GetElementTangent(0);
-		FbxVector4 Vectangent = tangent->GetDirectArray().GetAt(sIndex).mData;
-		for (int j = 0; j < 3; j++)
+		if (tangent)
 		{
-			int index = mesh->GetPolygonVertices()[sIndex + j];
-			vertices[index].tangent =
-			{ (float)Vectangent[0], (float)Vectangent[1], (float)Vectangent[2], (float)Vectangent[3] };
+			FbxVector4 Vectangent = tangent->GetDirectArray().GetAt(sIndex).mData;
+			for (int j = 0; j < 3; j++)
+			{
+				int index = mesh->GetPolygonVertices()[sIndex + j];
+				vertices[index].tangent =
+				{ (float)Vectangent[0], (float)Vectangent[1], (float)Vectangent[2], (float)Vectangent[3] };
+			}
 		}
+		else
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				int index = mesh->GetPolygonVertices()[sIndex + j];
+				vertices[index].tangent
+					= { 0.0f,0.0f,0.0f,0.0f };
+			}
+		}
+		
 	}
 
 	//頂点バッファ
@@ -637,9 +651,6 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 
 void Fbx::Draw(Transform& transform)
 {
-	//Direct3D::SetShader(SHADER_3D);
-	//Direct3D::SetShader(SHADER_TOON);
-	//Direct3D::SetShader(SHADER_TOONOUTLINE);
 	Direct3D::SetShader(SHADER_NORMALMAP);
 	transform.Calclation();//トランスフォームを計算
 	//コンスタントバッファに情報を渡す
