@@ -101,7 +101,7 @@ class Fbx
 	struct MATERIAL
 	{
 		Texture*	pTexture;
-		Texture*	pNormalTexture;
+		Texture*	pNormalMap;
 		XMFLOAT4    diffuse;
 		XMFLOAT4	amibent;
 		XMFLOAT4	specular;
@@ -117,7 +117,8 @@ class Fbx
 		XMFLOAT4	ambientColor;
 		XMFLOAT4	specularColor;
 		FLOAT		shiness;
-		BOOL    isTextured;// ディフューズカラー（マテリアルの色）
+		BOOL hasTexture;
+		BOOL hasNormalMap;
 
 	};
 
@@ -125,8 +126,8 @@ class Fbx
 	{
 		XMVECTOR position; //位置
 		XMVECTOR uv; //テクスチャ座標
-		XMVECTOR normal; //法線
-		XMVECTOR tangent; //接線
+		XMVECTOR normal; //法線ベクトル
+		XMVECTOR tangent; //接線ベクトル
 	};
 
 	int vertexCount_;   //頂点数

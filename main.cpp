@@ -89,9 +89,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	pColorBall = new ColorBall(nullptr);
 	pColorBall->Initialize();
 
-	Arrow* pArrow;
+	/*Arrow* pArrow;
 	pArrow = new Arrow(nullptr);
-	pArrow->Initialize();
+	pArrow->Initialize();*/
 
 
 	//メッセージループ（何か起きるのを待つ）
@@ -147,7 +147,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 			pRootJob->UpdateSub();
 
 			pColorBall->Update();
-			pArrow->Update();
+			//pArrow->Update();
 
 			//▼描画
 			Direct3D::BeginDraw();
@@ -157,7 +157,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 
 
 			pColorBall->Draw();
-			pArrow->Draw();
+			//pArrow->Draw();
 
 			Direct3D::EndDraw();
 		}
@@ -169,7 +169,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 	Direct3D::Release();
 
 	pColorBall->Release();
-	pArrow->Release();
+	//pArrow->Release();
 
 	return 0;
 }

@@ -431,19 +431,20 @@ void Fbx::InitVertex(fbxsdk::FbxMesh* mesh)
 		}
 	}
 
+	//タンジェント取得
 	for (int i = 0; i < polygonCount_; i++)
 	{
-		mesh->GetElementTangentCount();//これが0なんだなぁ
 		int sIndex = mesh->GetPolygonVertexIndex(i);
+
 		FbxGeometryElementTangent* tangent = mesh->GetElementTangent(0);
+		FbxVector4 Vectangent{ 0,0,0,0 };
 		if (tangent)
 		{
-			FbxVector4 Vectangent = tangent->GetDirectArray().GetAt(sIndex).mData;
+			Vectangent = tangent->GetDirectArray().GetAt(sIndex).mData;
 			for (int j = 0; j < 3; j++)
 			{
 				int index = mesh->GetPolygonVertices()[sIndex + j];
-				vertices[index].tangent =
-				{ (float)Vectangent[0], (float)Vectangent[1], (float)Vectangent[2], (float)Vectangent[3] };
+				vertices[index].tangent = XMVectorSet((float)Vectangent[0], (float)Vectangent[1], (float)Vectangent[2], 0.0f);
 			}
 		}
 		else
@@ -615,7 +616,7 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 		//ノーマルマップ用テクスチャ
 		{
 			//テクスチャ情報
-			FbxProperty  lProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sNormalMap);
+			FbxProperty  lProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sBump);
 
 			//テクスチャの数数
 			int fileTextureCount = lProperty.GetSrcObjectCount<FbxFileTexture>();
@@ -633,14 +634,14 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 				wsprintf(name, "%s%s", name, ext);
 
 				//ファイルからテクスチャ作成
-				pMaterialList_[i].pNormalTexture = new Texture;
+				pMaterialList_[i].pNormalMap = new Texture;
 				HRESULT hr = pMaterialList_[i].pTexture->Load(name);
 				assert(hr == S_OK);
 			}
 			//テクスチャなし
 			else
 			{
-				pMaterialList_[i].pNormalTexture = nullptr;
+				pMaterialList_[i].pNormalMap= nullptr;
 			}
 		}
 
@@ -675,7 +676,7 @@ void Fbx::Draw(Transform& transform)
 
 
 		//cb.diffuseColor = XMFLOAT4(1, 1, 1, 1);
-		cb.isTextured = pMaterialList_[i].pTexture != nullptr;
+		cb.hasTexture = pMaterialList_[i].pTexture != nullptr;
 
 		D3D11_MAPPED_SUBRESOURCE pdata;
 		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);  // GPUからのデータアクセスを止める
@@ -711,9 +712,9 @@ void Fbx::Draw(Transform& transform)
 			ID3D11ShaderResourceView* pSRV = pMaterialList_[i].pTexture->GetSRV();
 			Direct3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
 		}
-		if (pMaterialList_[i].pNormalTexture)
+		if (pMaterialList_[i].pNormalMap)
 		{
-			ID3D11ShaderResourceView* pSRV = pMaterialList_[i].pNormalTexture->GetSRV();
+			ID3D11ShaderResourceView* pSRV = pMaterialList_[i].pNormalMap->GetSRV();
 			Direct3D::pContext_->PSSetShaderResources(2, 1, &pSRV);
 		}
 

@@ -121,11 +121,11 @@ void Stage::Update()
 //•`‰æ
 void Stage::Draw()
 {
-    Model::SetTransform(hModel_, transform_);
+    /*Model::SetTransform(hModel_, transform_);
     Model::Draw(hModel_);
 
     Model::SetTransform(hLightBall_, trLight);
-    Model::Draw(hLightBall_);
+    Model::Draw(hLightBall_);*/
 }
 
 //ŠJ•ú
