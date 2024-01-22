@@ -635,7 +635,7 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 
 				//ファイルからテクスチャ作成
 				pMaterialList_[i].pNormalMap = new Texture;
-				HRESULT hr = pMaterialList_[i].pTexture->Load(name);
+				HRESULT hr = pMaterialList_[i].pNormalMap->Load(name);
 				assert(hr == S_OK);
 			}
 			//テクスチャなし

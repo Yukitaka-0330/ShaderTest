@@ -18,8 +18,9 @@ void ColorBall::Initialize()
     hModel_ = Model::Load("Assets/Donut.fbx");
     assert(hModel_ >= 0);
 
-    transform_.position_.x = 3;
-    transform_.position_.y = 2;
+    //transform_.position_.x = 3;
+    transform_.position_.y = 3;
+    transform_.position_.z = -7;
     //transform_.rotate_.x = -90;
     transform_.scale_ = { 0.5,0.5,0.5 };
 }
