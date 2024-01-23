@@ -15,8 +15,8 @@ ColorBall::~ColorBall()
 //‰Šú‰»
 void ColorBall::Initialize()
 {
-    //hModel_ = Model::Load("Assets/Donut.fbx");
-    hModel_ = Model::Load("Assets/ColorDice.fbx");
+    hModel_ = Model::Load("Assets/Donut.fbx");
+    //hModel_ = Model::Load("Assets/ColorDice.fbx");
     assert(hModel_ >= 0);
 
     //transform_.position_.x = 3;
