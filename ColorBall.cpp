@@ -15,15 +15,17 @@ ColorBall::~ColorBall()
 //èâä˙âª
 void ColorBall::Initialize()
 {
-    hModel_ = Model::Load("Assets/Donut.fbx");
-    //hModel_ = Model::Load("Assets/ColorDice.fbx");
+    //hModel_ = Model::Load("Assets/Donut.fbx");
+    hModel_ = Model::Load("Assets/ColorDice.fbx");
     assert(hModel_ >= 0);
 
     //transform_.position_.x = 3;
     transform_.position_.y = 3;
     //transform_.position_.z = -7;
     //transform_.rotate_.x = -90;
-    transform_.scale_ = { 0.5,0.5,0.5 };
+    //transform_.scale_ = { 0.5,0.5,0.5 };
+
+    transform_.scale_ = { 1.5f,1.5f,1.5f };
 }
 
 //çXêV
