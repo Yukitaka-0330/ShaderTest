@@ -58,8 +58,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL, f
 
 	normal.w = 0;
 	normal = mul(normal, matNormal);
-	normal = normalize(normal);//法線ベクトルをローカル座標に変換したやつ
-	normal.w = 0;
+	normal = normalize(normal);//法線ベクトルをローカル座標に変換したやつ0
 	outData.normal = normal;
 
 	tangent.w = 0;
@@ -100,31 +99,6 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL, f
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
-	//float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);
-	//float4 ambentSource = ambientColor;
-	//float4 diffuse;
-	//float4 ambient;
-	//float4 NL = dot(inData.normal, normalize(lightPosition));
-	////float4 NL = saturate(dot(inData.normal, normalize(lightPosition)));
-
-	//float4 reflect = normalize(2 * NL * inData.normal - normalize(lightPosition));
-	//float4 specular = pow(saturate(dot(reflect, normalize(inData.eyev))), shiness) * specularColor;
-
-	//if (hasTexture == false)
-	//{
-	//	diffuse = lightSource * diffuseColor * inData.color;
-	//	ambient = lightSource * diffuseColor * ambentSource;
-	//}
-	//else
-	//{
-	//	diffuse = lightSource * g_texture.Sample(g_sampler, inData.uv) * inData.color;
-	//	ambient = lightSource * g_texture.Sample(g_sampler, inData.uv) * ambentSource;
-	//}
-
-	//return diffuse + ambient + specular;
-	////return shiness /100.0f;
-
-
 	float4 lightSource = float4(1.0, 1.0, 1.0, 1.0);
 	float4 diffuse;
 	float4 ambient;
@@ -138,8 +112,10 @@ float4 PS(VS_OUT inData) : SV_Target
 
 		float4 NL = clamp(dot(tmpNormal, inData.light), 0, 1);
 
-		float4 reflection = reflect(-inData.light, tmpNormal);
-		float4 specular = pow(saturate(dot(reflection, inData.Neyev)), shiness) * specularColor;
+		float4 light = normalize(lightPosition);
+		light = normalize(light);
+		float4 reflection = reflect(light, tmpNormal);
+		float4 specular = pow(saturate(dot(reflection, inData.Neyev)), 2) * specularColor;
 
 		if (hasTexture != 0)
 		{
@@ -151,7 +127,7 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = diffuseColor * NL;
 			ambient = diffuseColor * ambientColor;
 		}
-		return   diffuse;
+		return diffuse + ambient + specular;
 	}
 	else
 	{
@@ -170,10 +146,7 @@ float4 PS(VS_OUT inData) : SV_Target
 		}
 		float4 result = diffuse + ambient + specular;
 		if (hasTexture)
-		{
 			result.a = inData.uv.x;
-		}
 		return result;
-
 	}
 }
