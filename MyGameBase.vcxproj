@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="Arrow.cpp" />
     <ClCompile Include="ColorBall.cpp" />
+    <ClCompile Include="ColorDice.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\Direct3D.cpp" />
     <ClCompile Include="Engine\Fbx.cpp" />
@@ -206,6 +207,7 @@
   <ItemGroup>
     <ClInclude Include="Arrow.h" />
     <ClInclude Include="ColorBall.h" />
+    <ClInclude Include="ColorDice.h" />
     <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\Direct3D.h" />
     <ClInclude Include="Engine\Fbx.h" />

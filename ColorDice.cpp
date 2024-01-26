@@ -1,26 +1,26 @@
-#include "ColorBall.h"
+#include "ColorDice.h"
 #include "Engine/Model.h"
 
 //コンストラクタ
-ColorBall::ColorBall(GameObject* parent)
-    :GameObject(parent, "ColorBall"), hModel_(-1)
+ColorDice::ColorDice(GameObject* parent)
+    :GameObject(parent, "ColorDice"), hModel_(-1)
 {
 }
 
 //デストラクタ
-ColorBall::~ColorBall()
+ColorDice::~ColorDice()
 {
 }
 
 //初期化
-void ColorBall::Initialize()
+void ColorDice::Initialize()
 {
     //hModel_ = Model::Load("Assets/Donut.fbx");
-    //hModel_ = Model::Load("Assets/ColorBall.fbx");
-    hModel_ = Model::Load("Assets/Ball3.fbx");
+    //hModel_ = Model::Load("Assets/ColorDice.fbx");
+    hModel_ = Model::Load("Assets/ColorDice.fbx");
     assert(hModel_ >= 0);
 
-    transform_.position_.x = 3;
+    //transform_.position_.x = 3;
     transform_.position_.y = 3;
     //transform_.position_.z = -7;
     //transform_.rotate_.x = -90;
@@ -30,19 +30,19 @@ void ColorBall::Initialize()
 }
 
 //更新
-void ColorBall::Update()
+void ColorDice::Update()
 {
     transform_.rotate_.y += 1;
 }
 
 //描画
-void ColorBall::Draw()
+void ColorDice::Draw()
 {
     Model::SetTransform(hModel_, transform_);
     Model::Draw(hModel_);
 }
 
 //開放
-void ColorBall::Release()
+void ColorDice::Release()
 {
 }
