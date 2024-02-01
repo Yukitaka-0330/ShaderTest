@@ -17,7 +17,7 @@ void ColorDice::Initialize()
 {
     //hModel_ = Model::Load("Assets/Donut.fbx");
     //hModel_ = Model::Load("Assets/ColorDice.fbx");
-    hModel_ = Model::Load("Assets/ColorDice.fbx");
+    hModel_ = Model::Load("Assets/WaterSurface.fbx");
     assert(hModel_ >= 0);
 
     //transform_.position_.x = 3;
