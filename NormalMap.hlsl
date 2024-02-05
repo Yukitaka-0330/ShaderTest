@@ -128,17 +128,17 @@ float4 PS(VS_OUT inData) : SV_Target
 
 	if (hasNormalMap)
 	{
-		inData.light = normalize(inData.light);
+		//inData.light = normalize(inData.light);
 		float4 tmpNormal = normalTex.Sample(g_sampler, inData.uv) * 2.0f - 1.0f;
 		tmpNormal.w = 0;
 		tmpNormal = normalize(tmpNormal);
 
 		float4 NL = clamp(dot(tmpNormal, inData.light), 0, 1);
 
-		/*float4 light = normalize(lightPosition);
-		light = normalize(light);*/
+		float4 light = normalize(lightPosition);
+		light = normalize(light);
 
-		float4 reflection = reflect(inData.light, tmpNormal);
+		float4 reflection = reflect(light, tmpNormal);
 		float4 specular = pow(saturate(dot(reflection, inData.Neyev)), 2) * specularColor;
 
 		if (hasTexture != 0)
