@@ -38,8 +38,8 @@ void ColorDice::Update()
 //•`‰æ
 void ColorDice::Draw()
 {
-    Model::SetTransform(hModel_, transform_);
-    Model::Draw(hModel_);
+    /*Model::SetTransform(hModel_, transform_);
+    Model::Draw(hModel_);*/
 }
 
 //ŠJ•ú

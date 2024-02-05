@@ -20,7 +20,7 @@ void ColorBall::Initialize()
     hModel_ = Model::Load("Assets/Ball3.fbx");
     assert(hModel_ >= 0);
 
-    transform_.position_.x = 3;
+    //transform_.position_.x = 3;
     transform_.position_.y = 3;
     //transform_.position_.z = -7;
     //transform_.rotate_.x = -90;
