@@ -16,12 +16,13 @@ ColorDice::~ColorDice()
 void ColorDice::Initialize()
 {
     //hModel_ = Model::Load("Assets/Donut.fbx");
-    //hModel_ = Model::Load("Assets/ColorDice.fbx");
-    hModel_ = Model::Load("Assets/WaterSurface.fbx");
+    hModel_ = Model::Load("Assets/RedDice.fbx");
+    //hModel_ = Model::Load("Assets/WaterSurface.fbx");
     assert(hModel_ >= 0);
 
     //transform_.position_.x = 3;
-    transform_.position_.y = 3;
+    transform_.position_.y = 3.5f;
+    transform_.position_.z =  -3.5f;
     //transform_.position_.z = -7;
     //transform_.rotate_.x = -90;
     //transform_.scale_ = { 0.5,0.5,0.5 };
@@ -38,8 +39,8 @@ void ColorDice::Update()
 //•`‰æ
 void ColorDice::Draw()
 {
-    /*Model::SetTransform(hModel_, transform_);
-    Model::Draw(hModel_);*/
+    Model::SetTransform(hModel_, transform_);
+    Model::Draw(hModel_);
 }
 
 //ŠJ•ú
