@@ -47,4 +47,11 @@ namespace Direct3D
 	//解放
 	void Release();
 
+	/// <summary>
+	/// Zバッファへの書き込みON/OFF
+	/// </summary>
+	/// <param name="isWrite">isWrite	ue=書き込みON／false=書き込みOFF</param>
+	void SetDepthBafferWriteEnable(bool isWrite);
+	extern SIZE screenSize;
+
 };

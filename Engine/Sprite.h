@@ -15,7 +15,10 @@ class Sprite
 	//コンスタントバッファー
 	struct CONSTANT_BUFFER
 	{
-		XMMATRIX	matW;
+		XMMATRIX	world;	//頂点座標変換行列
+		XMMATRIX	uvTrans; //テクスチャ座標変換行列
+		XMFLOAT4	color;	//テクスチャとの合成
+		float scroll;
 	};
 
 	//頂点情報
@@ -52,9 +55,24 @@ public:
 	//描画
 	//引数：transform	トランスフォームクラスオブジェクト
 	void Draw(Transform& transform);
+	void Draw(Transform& transform, RECT rect, float alpha);
 
-	//開放
+	//解放
 	void Release();
+
+	/// <summary>
+	/// 画像サイズの取得
+	/// </summary>
+	/// <returns>画像サイズ</returns>
+	XMFLOAT2 GetTextureSize() { return pTexture_->GetTextureSize(); }
+
+	/// <summary>
+	/// ロード
+	/// </summary>
+	/// <param name="fileName">画像ファイル名</param>
+	/// <returns>成功/失敗</returns>
+	HRESULT Load(std::string fileName);
+	float scrollVall;
 
 private:
 
