@@ -1,5 +1,6 @@
 #include "Sprite.h"
 #include "Camera.h"
+
 Sprite::Sprite() :pVertexBuffer_(nullptr), pIndexBuffer_(nullptr), pConstantBuffer_(nullptr), pTexture_(nullptr),hr(0),indexNum_(0),vertexNum_(0),scrollVall(0)
 {
 }
@@ -118,7 +119,7 @@ void Sprite::Draw(Transform& transform, RECT rect, float alpha)
 	SetBufferToPipeline();
 
 	//ポリゴンメッシュを描画する
-	Direct3D::pContext_->DrawIndexed(indexNum, 0, 0);
+	Direct3D::pContext_->DrawIndexed(indexNum_, 0, 0);
 
 	Direct3D::SetShader(SHADER_TYPE::SHADER_3D);
 
@@ -219,7 +220,7 @@ void Sprite::PassDataToCB(XMMATRIX worldMatrix)
 {
 
 	CONSTANT_BUFFER cb;
-	cb.matW = XMMatrixTranspose(worldMatrix);
+	cb.world = XMMatrixTranspose(worldMatrix);
 
 	D3D11_MAPPED_SUBRESOURCE pdata;
 	Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのデータアクセスを止める

@@ -31,11 +31,11 @@ class Sprite
 	HRESULT hr;
 
 protected:
-	UINT64  vertexNum_; //頂点数
+	UINT  vertexNum_; //頂点数
 	vector<VERTEX> vertices_; //頂点情報
 	ID3D11Buffer* pVertexBuffer_; //頂点バッファ
 
-	UINT64 indexNum_; //インデックス数
+	UINT indexNum_; //インデックス数
 	vector<int> index_; //インデックス情報
 
 	Texture* pTexture_; //テクスチャ
