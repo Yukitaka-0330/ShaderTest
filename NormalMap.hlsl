@@ -20,6 +20,9 @@ cbuffer global:register (b0)
 	float		shiness;
 	int			hasTexture;		// テクスチャ貼ってあるかどうか
 	int			hasNormalMap;	//ノーマルマップが張られているかどうか
+	float		scrollX;
+	float		scrollY;
+
 };
 
 cbuffer global:register (b1)
