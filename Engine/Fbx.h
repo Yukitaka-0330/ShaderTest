@@ -120,6 +120,7 @@ class Fbx
 		BOOL hasTexture;
 		BOOL hasNormalMap;
 
+		float scroll;
 	};
 
 	struct VERTEX

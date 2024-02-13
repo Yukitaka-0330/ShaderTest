@@ -129,24 +129,24 @@ HRESULT Direct3D::Initialize(int winW, int winH, HWND hWnd)
     pDevice_->CreateDepthStencilView(pDepthStencil, NULL, &pDepthStencilView);
 
     //ƒuƒŒƒ“ƒhƒXƒe[ƒg
-    D3D11_BLEND_DESC BlendDesc;
-    ZeroMemory(&BlendDesc, sizeof(BlendDesc));
-    BlendDesc.AlphaToCoverageEnable = FALSE;
-    BlendDesc.IndependentBlendEnable = FALSE;
+    //D3D11_BLEND_DESC BlendDesc;
+    //ZeroMemory(&BlendDesc, sizeof(BlendDesc));
+    //BlendDesc.AlphaToCoverageEnable = FALSE;
+    //BlendDesc.IndependentBlendEnable = FALSE;
 
-    BlendDesc.RenderTarget[0].BlendEnable = TRUE;                   //”¼“§–¾Žg‚¤‚©‚Ç‚¤‚©
-    BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;     //¡•`‰æ‚µ‚æ‚¤‚Æ‚µ‚Ä‚é‚à‚Ì
-    BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;//‚·‚Å‚É•`‰æ‚³‚ê‚Ä‚¢‚é‚à‚Ì
-    BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    //BlendDesc.RenderTarget[0].BlendEnable = TRUE;                   //”¼“§–¾Žg‚¤‚©‚Ç‚¤‚©
+    //BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;     //¡•`‰æ‚µ‚æ‚¤‚Æ‚µ‚Ä‚é‚à‚Ì
+    //BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;//‚·‚Å‚É•`‰æ‚³‚ê‚Ä‚¢‚é‚à‚Ì
+    //BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
-    BlendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-    BlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-    BlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    pDevice_->CreateBlendState(&BlendDesc, &pBlendStat);
+    //BlendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    //BlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    //BlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    //BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    //pDevice_->CreateBlendState(&BlendDesc, &pBlendStat);
 
-    float blendFactor[4] = { D3D11_BLEND_ZERO,D3D11_BLEND_ZERO,D3D11_BLEND_ZERO,D3D11_BLEND_ZERO };
-    pContext_->OMSetBlendState(pBlendStat, blendFactor, 0xffffffff);
+    //float blendFactor[4] = { D3D11_BLEND_ZERO,D3D11_BLEND_ZERO,D3D11_BLEND_ZERO,D3D11_BLEND_ZERO };
+    //pContext_->OMSetBlendState(pBlendStat, blendFactor, 0xffffffff);
 
 
 

@@ -652,6 +652,9 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 
 void Fbx::Draw(Transform& transform)
 {
+	static float scrollVal = 0.0f;
+	scrollVal += 0.001f;
+
 	//Direct3D::SetShader(SHADER_2D);
 	Direct3D::SetShader(SHADER_NORMALMAP);
 	//Direct3D::SetShader(SHADER_3D);
@@ -668,6 +671,7 @@ void Fbx::Draw(Transform& transform)
 		cb.ambientColor = pMaterialList_[i].amibent;
 		cb.specularColor = pMaterialList_[i].specular;
 		cb.shiness = pMaterialList_[i].shiness;
+		cb.scroll = scrollVal;
 
 
 		//cb.lightDirection = XMFLOAT4(1, 2, 1, 1);
