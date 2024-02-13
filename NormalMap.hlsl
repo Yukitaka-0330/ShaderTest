@@ -120,8 +120,8 @@ float4 PS(VS_OUT inData) : SV_Target
 		/*float4 light = normalize(lightPosition);
 		light = normalize(light);*/
 		float4 reflection = reflect(inData.light, tmpNormal);
-		float4 specular = pow(saturate(dot(reflection, inData.Neyev)), shininess) * specularColor;
-	
+		float4 specular = pow(saturate(dot(reflection, inData.Neyev)), 1) * lightSource;
+		//return reflection;
 
 		if (hasTexture != 0)
 		{
@@ -133,6 +133,7 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = diffuseColor * NL;
 			ambient = diffuseColor * ambientColor;
 		}
+		//return specular;
 		return  diffuse + ambient + specular;
 
 	}
@@ -155,6 +156,8 @@ float4 PS(VS_OUT inData) : SV_Target
 		if (hasTexture)
 			result.a = inData.uv.x;
 		return result;*/
+		//return specular;
+
 		return diffuse + specular + ambient;
 	}
 }
