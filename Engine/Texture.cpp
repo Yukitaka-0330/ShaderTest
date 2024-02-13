@@ -26,6 +26,7 @@ HRESULT Texture::Load(string fileName)
     
     HRESULT hr;
     hr = LoadFromWICFile(wtext, WIC_FLAGS::WIC_FLAGS_NONE, &metadata, image);
+    imgSize_ = XMFLOAT2{ (float)image.GetImages()->width, (float)image.GetImages()->height };
 
     if (FAILED(hr))
     {
@@ -36,9 +37,9 @@ HRESULT Texture::Load(string fileName)
     D3D11_SAMPLER_DESC  SamDesc;
     ZeroMemory(&SamDesc, sizeof(D3D11_SAMPLER_DESC));
     SamDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    SamDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-    SamDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
-    SamDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+    SamDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    SamDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    SamDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
     hr = Direct3D::pDevice_->CreateSamplerState(&SamDesc, &pSampler_);
     if (FAILED(hr))
     {
