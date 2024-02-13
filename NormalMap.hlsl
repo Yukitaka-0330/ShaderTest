@@ -17,7 +17,7 @@ cbuffer global:register (b0)
 	float4		diffuseColor;	// ディフューズカラー（マテリアルの色）
 	float4		ambientColor;
 	float4		specularColor;
-	float		shiness;
+	float		shininess;
 	int			hasTexture;		// テクスチャ貼ってあるかどうか
 	int			hasNormalMap;	//ノーマルマップが張られているかどうか
 	float		scrollX;
@@ -120,7 +120,7 @@ float4 PS(VS_OUT inData) : SV_Target
 		/*float4 light = normalize(lightPosition);
 		light = normalize(light);*/
 		float4 reflection = reflect(inData.light, tmpNormal);
-		float4 specular = pow(saturate(dot(reflection, inData.Neyev)), shiness) * specularColor;
+		float4 specular = pow(saturate(dot(reflection, inData.Neyev)), shininess) * specularColor;
 	
 
 		if (hasTexture != 0)
@@ -133,16 +133,14 @@ float4 PS(VS_OUT inData) : SV_Target
 			diffuse = diffuseColor * NL;
 			ambient = diffuseColor * ambientColor;
 		}
-		//return  diffuse + ambient + Specular;
-		//return g_texture.Sample(g_sampler, tmpNormalUV);
-		return diffuse;
+		return  diffuse + ambient + specular;
 
 	}
 	else
 	{
 		float4 reflection = reflect(normalize(lightPosition), inData.normal);
 
-		float4 specular = pow(saturate(dot(normalize(reflection), inData.eyev)), shiness) * specularColor;
+		float4 specular = pow(saturate(dot(normalize(reflection), inData.eyev)), shininess) * specularColor;
 		if (hasTexture == 0)
 		{
 			diffuse = lightSource * diffuseColor * inData.color;
